@@ -1,0 +1,19 @@
+Set GOPATH to /home/vinit/learn-chaincode
+
+export $GOPATH = /home/vinit/learn-chaincode
+
+
+Starter Network ID -> e57848b76d894377a7f176f544757add  //Blockchain-g7
+
+Peer 0 -> https://e57848b76d894377a7f176f544757add-vp0.us.blockchain.ibm.com:5001 -->   user_type2_0
+
+
+Peer 1 -> https://e57848b76d894377a7f176f544757add-vp1.us.blockchain.ibm.com:5001 --> 	user_type2_1
+
+Peer 2 -> https://e57848b76d894377a7f176f544757add-vp2.us.blockchain.ibm.com:5001 -->   user_type2_2
+
+Peer 3 -> https://e57848b76d894377a7f176f544757add-vp3.us.blockchain.ibm.com:5001 -->   user_type2_3
+
+
+
+
