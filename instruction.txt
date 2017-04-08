@@ -1,6 +1,6 @@
 Set GOPATH to /home/vinit/learn-chaincode
 
-export $GOPATH = /home/vinit/learn-chaincode
+export GOPATH=/home/vinit/learn-chaincode
 
 
 Starter Network ID -> e57848b76d894377a7f176f544757add  //Blockchain-g7
