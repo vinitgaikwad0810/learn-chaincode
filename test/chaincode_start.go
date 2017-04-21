@@ -307,6 +307,8 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 		return nil, errors.New(jsonResp)
 	}
 
+	fmt.Println(valAsbytes)
+
 	return nil, nil
 
 }
