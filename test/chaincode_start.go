@@ -20,7 +20,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"os"
 	"strings"
-	"bytes"
+	//"bytes"
 	//"strconv"
 )
 
