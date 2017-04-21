@@ -155,8 +155,8 @@ func (t *SimpleChaincode) putcontract(stub shim.ChaincodeStubInterface, args []s
 		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
 	}
 
-	key = args[0] //rename for funsies
-	value = args[1]
+	key = args[1] //rename for funsies
+	value = args[2]
 	err = stub.PutState(key, []byte(value)) //write the variable into the chaincode state
 	if err != nil {
 		return nil, err
@@ -302,7 +302,8 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 
 	valAsbytes, err := stub.GetState(productType)
 
-	fmt.Println("\n\n Contract Retrieved " + valAsbytes)
+  contractInfo := string(valAsbytes[:n])
+	fmt.Println("\n\n Contract Retrieved " + contractInfo)
 
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
