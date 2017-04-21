@@ -307,7 +307,8 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 		return nil, errors.New(jsonResp)
 	}
 
-	return valAsbytes, nil
+	return nil, nil
+
 }
 
 // // read - query function to read key/value pair
