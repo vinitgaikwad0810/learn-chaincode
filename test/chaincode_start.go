@@ -303,8 +303,10 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 
 	valAsbytes, err := stub.GetState(productType)
 
-	n := bytes.IndexByte(valAsbytes, 0)
-	contractInfo := string(valAsbytes[:n])
+	// n := bytes.IndexByte(valAsbytes, 0)
+	// contractInfo := string(valAsbytes[:n])
+
+	contractInfo := string(valAsbytes[:])
 	fmt.Println("\n\n Contract Retrieved " + contractInfo)
 
 	if err != nil {
