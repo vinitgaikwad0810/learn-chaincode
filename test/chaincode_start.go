@@ -20,6 +20,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"os"
 	"strings"
+	"bytes"
 	//"strconv"
 )
 
@@ -302,7 +303,8 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 
 	valAsbytes, err := stub.GetState(productType)
 
-  contractInfo := string(valAsbytes[:n])
+	n := bytes.IndexByte(valAsbytes, 0)
+	contractInfo := string(valAsbytes[:n])
 	fmt.Println("\n\n Contract Retrieved " + contractInfo)
 
 	if err != nil {
