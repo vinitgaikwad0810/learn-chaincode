@@ -152,7 +152,7 @@ func (t *SimpleChaincode) putcontract(stub shim.ChaincodeStubInterface, args []s
 	var err error
 	fmt.Println("running write()")
 
-	if len(args) != 2 {
+	if len(args) != 3 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
 	}
 
