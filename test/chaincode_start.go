@@ -302,8 +302,8 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 
 	valAsbytes, err := stub.GetState(productType)
 
-	fmt.Println(valAsbytes)
-	
+	fmt.Println("\n\n Contract Retrieved " + valAsbytes)
+
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
 
