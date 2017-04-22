@@ -301,18 +301,40 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 	eventInfo := args[0]
-	productType := args[1]
+	productId := args[1]
 
 	fmt.Println("\n\n eventInfo ------------------------- " + eventInfo)
 
-	fmt.Println("\n\n productType ------------------------- " + productType)
+	fmt.Println("\n\n productType ------------------------- " + productId)
 
-	valAsbytes, _ := stub.GetState(productType)
+	valAsbytes, _ := stub.GetState(productId)
 
 	// n := bytes.IndexByte(valAsbytes, 0)
 	// contractInfo := string(valAsbytes[:n])
 
-	contractInfo := string(valAsbytes[:])
+	productInfo := string(valAsbytes[:])
+
+	fmt.Println("\n productInfo is as follows " + productInfo)
+
+	dec := json.NewDecoder(strings.NewReader(productInfo))
+
+	var vProductInfo map[string]interface{}
+
+	if err := dec.Decode(&vProductInfo); err != nil {
+		fmt.Println("ERROR: " + err.Error())
+
+	}
+
+	productType := vProductInfo["category"]
+
+	fmt.Println("\n Product Type is " + productType.(string))
+
+	contractInfoAsbytes, _ := stub.GetState(productType.(string))
+
+	// n := bytes.IndexByte(valAsbytes, 0)
+	// contractInfo := string(valAsbytes[:n])
+
+	contractInfo := string(contractInfoAsbytes[:])
 
 	fmt.Println("\n\n Contract Retrieved " + contractInfo)
 
