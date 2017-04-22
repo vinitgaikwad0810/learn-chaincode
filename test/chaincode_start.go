@@ -262,10 +262,13 @@ func (t *SimpleChaincode) getcontract(stub shim.ChaincodeStubInterface, args []s
 
 //Smart Contract Validaton
 
-func validateEvent(contractInfo string, eventInfo string) bool {
+func validateEvent(contractInfo string, eventInfo string) (bool, []Test, State) {
 
 	var vData map[string]interface{}
 	var vState map[string]interface{}
+	var tests []Test
+	var test Test
+	var state State
 
 	dec := json.NewDecoder(strings.NewReader(contractInfo))
 
@@ -303,11 +306,27 @@ func validateEvent(contractInfo string, eventInfo string) bool {
 		if eventParams[k] == nil || eventParams[k] != contractParams[k] {
 
 			fmt.Println("(" + k + "," + eventParams[k].(string) + ") is absent or different from what is expected in smart contract")
-			return false
+			return false, nil, state
 		}
+
+		test = Test{
+			Objective:      k,
+			ExpectedResult: contractParams[k].(string),
+			ActualResult:   eventParams[k].(string),
+			Status:         "VERIFIED",
+		}
+		tests = append(tests, test)
 	}
 
-	return true
+	state = State{
+		Text:    vState["qrcode"].(string),
+		Lat:     vState["lat"].(string),
+		Lang:    vState["lng"].(string),
+		Address: "NA",
+		Tests:   tests,
+	}
+
+	return true, tests, state
 }
 
 func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
@@ -365,14 +384,31 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 
 	fmt.Println("\n\n Contract Retrieved " + contractInfo)
 
-	ret := validateEvent(eventInfo, contractInfo)
+	ret, _, state := validateEvent(eventInfo, contractInfo)
 
 	if ret == true {
 
 		//fmt.Println("First element of interface array is " + vProductInfo["states"].([]interface{})[0].(string))
 		fmt.Println("JSON parsed into following struct \n")
+
 		fmt.Printf("%+v\n", productSchema)
 
+		productSchema.States = append(productSchema.States, state)
+
+		fmt.Println("JSON modified into following struct \n")
+
+		fmt.Printf("%+v\n", productSchema)
+
+		productSchemaJSON, err := json.Marshal(productSchema)
+		if err != nil {
+			fmt.Println(err)
+			return nil, errors.New("Error")
+		}
+
+		err = stub.PutState(productId, []byte(string(productSchemaJSON[:]))) //write the variable into the chaincode state
+		if err != nil {
+			return nil, err
+		}
 		validateResponse.status = "success"
 
 		validateResponseAsBytes, _ := json.Marshal(validateResponse) //convert to array of bytes
