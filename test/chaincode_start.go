@@ -369,7 +369,7 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 
 	if ret == true {
 
-		fmt.Println("First element of interface array is " + vProductInfo["states"].([]interface{})[0].(string))
+		//fmt.Println("First element of interface array is " + vProductInfo["states"].([]interface{})[0].(string))
 		fmt.Println("JSON parsed into following struct \n")
 		fmt.Printf("%+v\n", productSchema)
 
