@@ -24,6 +24,30 @@ import (
 	//"strconv"
 )
 
+type Test struct {
+	Objective      string `json:"objective"`
+	ExpectedResult string `json:"expectedResult"`
+	ActualResult   string `json:"actualResult"`
+	Status         string `json:"status"`
+}
+
+type State struct {
+	Text    string `json:"text"`
+	Lat     string `json:"lat"`
+	Lang    string `json:"lang"`
+	Address string `json:"address"`
+	Tests   []Test `json:"tests"`
+}
+
+type ProductSchema struct {
+	ProductID   string  `json:"productId"`
+	ProductName string  `json:"productName"`
+	Description string  `json:"description"`
+	Category    string  `json:"category"`
+	QrCode      string  `json:"qrCode"`
+	States      []State `json:"states"`
+}
+
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
 }
@@ -309,6 +333,9 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 
 	valAsbytes, _ := stub.GetState(productId)
 
+	var productSchema ProductSchema
+
+	json.Unmarshal(valAsbytes, &productSchema)
 	// n := bytes.IndexByte(valAsbytes, 0)
 	// contractInfo := string(valAsbytes[:n])
 
@@ -341,6 +368,10 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 	ret := validateEvent(eventInfo, contractInfo)
 
 	if ret == true {
+
+		fmt.Println("First element of interface array is " + vProductInfo["states"].([]interface{})[0].(string))
+		fmt.Println("JSON parsed into following struct \n")
+		fmt.Printf("%+v\n", productSchema)
 
 		validateResponse.status = "success"
 
