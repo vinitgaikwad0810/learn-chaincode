@@ -288,6 +288,8 @@ func validateEvent(contractInfo string, eventInfo string) (bool, []Test, State) 
 
 	eventParams := vState["params"].(map[string]interface{})
 
+	fmt.Println("QRcode" + vState["qrcode"].(string))
+
 	fmt.Println("\n\n eventParams--------------------------")
 
 	for k, v := range eventParams {
