@@ -323,12 +323,13 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 		validateResponse.status = "success"
 
 		validateResponseAsBytes, _ := json.Marshal(validateResponse) //convert to array of bytes
+
 		return validateResponseAsBytes, nil
 	}
 	validateResponse.status = "failure"
 
 	validateResponseAsBytes, _ := json.Marshal(validateResponse) //convert to array of bytes
-	return validateResponseAsBytes, nil
+	return nil, errors.New(string(validateResponseAsBytes[:]))
 
 	// if err != nil {
 	// 	jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
