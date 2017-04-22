@@ -12,8 +12,25 @@ import (
 	// "gopkg.in/mgo.v2/bson"
 	// "net/url"
 	//"reflect"
+	//"strconv"
 	"strings"
 )
+
+type Param struct {
+	SensorValue    string `json:"sensorValue"`
+	PhValue        string `json:"phValue"`
+	AlcoholContent string `json:"alcoholContent"`
+	Temperature    string `json:"temperature"`
+	Humidity       string `json:"humidity"`
+}
+
+type EventInfo struct {
+	Qrcode   string  `json:"qrcode"`
+	Lat      string  `json:"lat"`
+	Lng      string  `json:"lng"`
+	Username string  `json:"username"`
+	Params   Param `json:"params"`
+}
 
 func validateEvent(contractInfo string, eventInfo string) bool {
 
@@ -37,6 +54,8 @@ func validateEvent(contractInfo string, eventInfo string) bool {
 	contractParams := vData["params"].(map[string]interface{})
 
 	eventParams := vState["params"].(map[string]interface{})
+
+	fmt.Println("----" + vState["lat"].(string))
 
 	fmt.Println("\n\n eventParams--------------------------")
 
@@ -99,20 +118,31 @@ func main() {
   }
 }`
 
-	eventInfo := `{
+// 	eventInfo := `{
+//   "qrcode": "3fdsf-324-234-fds5",
+//   "lat": "23.8859",
+//   "lng": "45.0792",
+//   "username": "awaise@gmail.com",
+//   "params": {
+//     "sensorValue": "23",
+//     "phValue": "0.7",
+//     "alcoholContent": "67",
+//     "temperature": "24",
+//     "humidity": "23"
+//   }
+// }`
 
-   "params":{
+	eventInfo := `{"qrcode":"3fdsf-324-234-fds5","lat":"23.8859","lng":"45.0792","username":"awaise@gmail.com","params":{"sensorValue":"23","phValue":"0.7","alcoholContent":"67","temperature":"24","humidity":"23"}}`
 
-	 "sensorValue": "23",
- 	"phValue": "0.7",
- 	"alcoholContent": "67",
- 	"temperature": "24",
-	"humidity": "24"
+//	s, _ := strconv.Unquote(eventInfo)
 
- }
+	arr := []byte(eventInfo)
 
+	var eventInfoStruct EventInfo
 
- }`
+	json.Unmarshal(arr, &eventInfoStruct)
+
+	fmt.Printf("%+v\n", eventInfoStruct)
 
 	ret := validateEvent(contractInfo, eventInfo)
 

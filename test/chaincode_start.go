@@ -48,6 +48,22 @@ type ProductSchema struct {
 	States      []State `json:"states"`
 }
 
+type Param struct {
+	SensorValue    string `json:"sensorValue"`
+	PhValue        string `json:"phValue"`
+	AlcoholContent string `json:"alcoholContent"`
+	Temperature    string `json:"temperature"`
+	Humidity       string `json:"humidity"`
+}
+
+type EventInfo struct {
+	Qrcode   string  `json:"qrcode"`
+	Lat      string  `json:"lat"`
+	Lng      string  `json:"lng"`
+	Username string  `json:"username"`
+	Params   []Param `json:"params"`
+}
+
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
 }
@@ -262,7 +278,7 @@ func (t *SimpleChaincode) getcontract(stub shim.ChaincodeStubInterface, args []s
 
 //Smart Contract Validaton
 
-func validateEvent(contractInfo string, eventInfo string) (bool, []Test, State) {
+func validateEvent(contractInfo string, eventInfo string, eventInfoStruct EventInfo) (bool, []Test, State) {
 
 	var vData map[string]interface{}
 	var vState map[string]interface{}
@@ -321,10 +337,10 @@ func validateEvent(contractInfo string, eventInfo string) (bool, []Test, State) 
 	}
 
 	state = State{
-		Text:    "QrCode",
-		Lat:     vState["lat"].(string),
-		Lang:    vState["lng"].(string),
-		Address: "NA",
+		Text:    eventInfoStruct.Qrcode,
+		Lat:     eventInfoStruct.Lat,
+		Lang:    eventInfoStruct.Lng,
+		Address: eventInfoStruct.Username,
 		Tests:   tests,
 	}
 
@@ -386,7 +402,15 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 
 	fmt.Println("\n\n Contract Retrieved " + contractInfo)
 
-	ret, _, state := validateEvent(eventInfo, contractInfo)
+	arr := []byte(eventInfo)
+
+	var eventInfoStruct EventInfo
+
+	json.Unmarshal(arr, &eventInfoStruct)
+
+	fmt.Printf("Event Info Struct is %+v\n", eventInfoStruct)
+
+	ret, _, state := validateEvent(eventInfo, contractInfo, eventInfoStruct)
 
 	if ret == true {
 
