@@ -420,29 +420,31 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 
 	ret, _, state := validateEvent(contractInfo, eventInfo, eventInfoStruct)
 
+	fmt.Println("JSON parsed into following struct \n")
+
+	fmt.Printf("%+v\n", productSchema)
+
+	productSchema.States = append(productSchema.States, state)
+
+	fmt.Println("JSON modified into following struct \n")
+
+	fmt.Printf("%+v\n", productSchema)
+
+	productSchemaJSON, err := json.Marshal(productSchema)
+	if err != nil {
+		fmt.Println(err)
+		return nil, errors.New("Error")
+	}
+
+	err = stub.PutState(productId, []byte(string(productSchemaJSON[:]))) //write the variable into the chaincode state
+	if err != nil {
+		return nil, err
+	}
+
 	if ret == true {
 
 		//fmt.Println("First element of interface array is " + vProductInfo["states"].([]interface{})[0].(string))
-		fmt.Println("JSON parsed into following struct \n")
 
-		fmt.Printf("%+v\n", productSchema)
-
-		productSchema.States = append(productSchema.States, state)
-
-		fmt.Println("JSON modified into following struct \n")
-
-		fmt.Printf("%+v\n", productSchema)
-
-		productSchemaJSON, err := json.Marshal(productSchema)
-		if err != nil {
-			fmt.Println(err)
-			return nil, errors.New("Error")
-		}
-
-		err = stub.PutState(productId, []byte(string(productSchemaJSON[:]))) //write the variable into the chaincode state
-		if err != nil {
-			return nil, err
-		}
 		validateResponse.status = "success"
 
 		validateResponseAsBytes, _ := json.Marshal(validateResponse) //convert to array of bytes

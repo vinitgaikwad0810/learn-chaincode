@@ -132,8 +132,8 @@ func main() {
 //   }
 // }`
 
-	eventInfo := `{"qrcode":"3fdsf-324-234-fds5","lat":"23.8859","lng":"45.0792","username":"awaise@gmail.com","params":{"sensorValue":"23","phValue":"0.7","alcoholContent":"67","temperature":"24","humidity":"23"}}`
-
+//	eventInfo := `{"qrcode":"3fdsf-324-234-fds5","lat":"23.8859","lng":"45.0792","username":"awaise@gmail.com","params":{"sensorValue":"23","phValue":"0.7","alcoholContent":"67","temperature":"24","humidity":"23"}}`
+	eventInfo  := `{"qrcode":"2345","lat":"18.4865","lng":"73.7968","username":"awaise@gmail.com","params":{"sensorValue":"23","phValue":"0.7","alcoholContent":"67","temperature":"24","humidity":"23"}}}`
 //	s, _ := strconv.Unquote(eventInfo)
 
 	arr := []byte(eventInfo)
