@@ -324,6 +324,14 @@ func validateEvent(contractInfo string, eventInfo string, eventInfoStruct EventI
 		if eventParams[k] == nil || eventParams[k] != contractParams[k] {
 
 			fmt.Println("(" + k + "," + eventParams[k].(string) + ") is absent or different from what is expected in smart contract")
+
+			state = State{
+				Text:    eventInfoStruct.Qrcode,
+				Lat:     eventInfoStruct.Lat,
+				Lang:    eventInfoStruct.Lng,
+				Address: eventInfoStruct.Username,
+				Tests:   tests,
+			}
 			return false, nil, state
 		}
 
@@ -410,7 +418,7 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 
 	fmt.Printf("Event Info Struct is %+v\n", eventInfoStruct)
 
-	ret, _, state := validateEvent(eventInfo, contractInfo, eventInfoStruct)
+	ret, _, state := validateEvent(contractInfo, eventInfo, eventInfoStruct)
 
 	if ret == true {
 
