@@ -325,21 +325,21 @@ func validateEvent(contractInfo string, eventInfo string, eventInfoStruct EventI
 
 			fmt.Println("(" + k + "," + eventParams[k].(string) + ") is absent or different from what is expected in smart contract")
 
-			state = State{
-				Text:    eventInfoStruct.Qrcode,
-				Lat:     eventInfoStruct.Lat,
-				Lang:    eventInfoStruct.Lng,
-				Address: eventInfoStruct.Username,
-				Tests:   tests,
+			test = Test{
+				Objective:      k,
+				ExpectedResult: contractParams[k].(string),
+				ActualResult:   eventParams[k].(string),
+				Status:         "NOT VERIFIED",
 			}
-			return false, nil, state
-		}
 
-		test = Test{
-			Objective:      k,
-			ExpectedResult: contractParams[k].(string),
-			ActualResult:   eventParams[k].(string),
-			Status:         "VERIFIED",
+		} else {
+
+			test = Test{
+				Objective:      k,
+				ExpectedResult: contractParams[k].(string),
+				ActualResult:   eventParams[k].(string),
+				Status:         "VERIFIED",
+			}
 		}
 		tests = append(tests, test)
 	}
@@ -418,7 +418,7 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 
 	fmt.Printf("Event Info Struct is %+v\n", eventInfoStruct)
 
-	ret, _, state := validateEvent(contractInfo, eventInfo, eventInfoStruct)
+	_, _, state := validateEvent(contractInfo, eventInfo, eventInfoStruct)
 
 	fmt.Println("JSON parsed into following struct \n")
 
@@ -441,20 +441,13 @@ func (t *SimpleChaincode) validate(stub shim.ChaincodeStubInterface, args []stri
 		return nil, err
 	}
 
-	if ret == true {
+	//fmt.Println("First element of interface array is " + vProductInfo["states"].([]interface{})[0].(string))
 
-		//fmt.Println("First element of interface array is " + vProductInfo["states"].([]interface{})[0].(string))
-
-		validateResponse.status = "success"
-
-		validateResponseAsBytes, _ := json.Marshal(validateResponse) //convert to array of bytes
-
-		return validateResponseAsBytes, nil
-	}
-	validateResponse.status = "failure"
+	validateResponse.status = "success"
 
 	validateResponseAsBytes, _ := json.Marshal(validateResponse) //convert to array of bytes
-	return nil, errors.New(string(validateResponseAsBytes[:]))
+
+	return validateResponseAsBytes, nil
 
 	// if err != nil {
 	// 	jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
