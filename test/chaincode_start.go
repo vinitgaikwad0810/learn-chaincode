@@ -323,19 +323,26 @@ func validateEvent(contractInfo string, eventInfo string, eventInfoStruct EventI
 
 		if eventParams[k] == nil || eventParams[k] != contractParams[k] {
 
-			if eventParams[k] != nil {
+			if eventParams[k] != nil { //FAIL THE TEST
 				fmt.Println("(" + k + "," + eventParams[k].(string) + ") is different from what is expected in smart contract")
+				test = Test{
+					Objective:      k,
+					ExpectedResult: contractParams[k].(string),
+					ActualResult:   eventParams[k].(string),
+					Status:         "NOT VERIFIED",
+				}
 			} else {
 				fmt.Println("(" + k + ") is absent from event params")
-			}
-			test = Test{
-				Objective:      k,
-				ExpectedResult: contractParams[k].(string),
-				ActualResult:   eventParams[k].(string),
-				Status:         "NOT VERIFIED",
+
+				test = Test{
+					Objective:      k,
+					ExpectedResult: contractParams[k].(string),
+					ActualResult:   "nil",
+					Status:         "NOT VERIFIED",
+				}
 			}
 
-		} else {
+		} else { // PASS THE TEST
 
 			test = Test{
 				Objective:      k,
