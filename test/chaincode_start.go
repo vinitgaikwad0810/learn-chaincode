@@ -323,8 +323,11 @@ func validateEvent(contractInfo string, eventInfo string, eventInfoStruct EventI
 
 		if eventParams[k] == nil || eventParams[k] != contractParams[k] {
 
-			fmt.Println("(" + k + "," + eventParams[k].(string) + ") is absent or different from what is expected in smart contract")
-
+			if eventParams[k] != nil {
+				fmt.Println("(" + k + "," + eventParams[k].(string) + ") is different from what is expected in smart contract")
+			} else {
+				fmt.Println("(" + k + ") is absent from event params")
+			}
 			test = Test{
 				Objective:      k,
 				ExpectedResult: contractParams[k].(string),
