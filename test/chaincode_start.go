@@ -362,6 +362,8 @@ func validateEvent(contractInfo string, eventInfo string, eventInfoStruct EventI
 		Tests:   tests,
 	}
 
+
+
 	return true, tests, state
 }
 
